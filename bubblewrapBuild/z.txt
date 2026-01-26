@@ -1,0 +1,7 @@
+https://solanaconnector.vercel.app/manifest.webmanifest
+
+https://solanaconnector.vercel.app/logo-512x512.png
+
+
+bubblewrap init --manifest=https://solanaconnector.vercel.app/manifest.webmanifest
+
