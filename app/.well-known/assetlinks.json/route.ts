@@ -1,0 +1,16 @@
+import { NextResponse } from 'next/server';
+
+export async function GET() {
+    const assetLinks = [
+        {
+            relation: ["delegate_permission/common.handle_all_urls"],
+            target: {
+                namespace: "android_app",
+                package_name: "app.vercel.solanaconnector.twa",
+                sha256_cert_fingerprints: ["78:9D:C3:50:06:79:BF:D7:B7:0A:0F:0F:FE:F2:61:EC:16:2C:B5:D8:5D:9B:01:5E:B4:33:47:6D:AE:D2:55:45"],
+            },
+        },
+    ];
+
+    return NextResponse.json(assetLinks);
+}
