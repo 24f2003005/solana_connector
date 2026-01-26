@@ -11,15 +11,11 @@ export default function Home() {
           showSolBalance
           theme='light'
           CN_ConnectButton={styles.connectButton}
-          showDefaultToken={{
-            address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-            symbol: "USDC"
-          }}
         />
       </div>
 
       <div className={styles.eachButton}>
-        <span>Dark Theme,SolBalance </span>
+        <span>Dark Theme,SolBalance ,USDC</span>
         <ConnectButton
           showSolBalance
           theme='dark'
