@@ -36,7 +36,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <SolanaWrapper
           appName="AlgoBright Solana Connector"
-          appUrl="https://solanapwa.vercel.app/"
+          appUrl="https://solana-connector.vercel.app"
           autoConnect={true}
           defaultRpcUrl="https://mainnet.helius-rpc.com/?api-key=dfedba99-f41e-4398-a1f7-3e6e585428f4"
         >
