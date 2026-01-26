@@ -22,11 +22,23 @@ This project is powered by the **`algobright/solana-connector`**, which utilizes
 ## 🛠 Tech Stack
 
 - **Frontend:** React / Next.js
-- **Solana:** `@solana/web3.js`, `@solana/wallet-adapter-react`
-- **Connector:** `algobright/solana-connector`
+- **Solana:** `@solana-program/system`, `@solana/kit` ,`@solana/connector`
+- **Connector:** `algobright/solana-connector` (Optimized for @solana/kit)
 - **Android Wrapper:** Google Bubblewrap (Trusted Web Activity)
 
 ---
+
+### 🚀 What's New
+- **Solana Integration**: Implemented `algobright/solana-connector` for mobile-native wallet handshakes.
+- **PWA Enhancements**: Custom splash screen and standalone display mode for a native Android feel.
+- **Bubblewrap TWA**: Successfully converted the web app into a signed APK using Google's TWA standard.
+
+## 🧪 How to Test
+
+- 1. Download the `app-release-signed.apk` attached below.
+- 2. Install it on an Android device.
+- 3. Open the app and tap "Connect Wallet" to test the mobile-optimized Solana connection.
+
 
 ## 📦 1. Installation & Local Development
 
@@ -37,7 +49,7 @@ cd solana_connector
 npm install
 ```
 
-# Local Testing
+### Local Testing
 To test the UI and Solana logic:
 
 ```bash
@@ -90,8 +102,9 @@ Configuration: Follow the CLI wizard to set your App Name and Launcher Icons.
 Signing Key: If you don't have a .keystore file, Bubblewrap will generate one for you. Keep this file and its password safe!
 
 ### Step B: Build and Sign
-Bash
+```Bash
 bubblewrap build
+```
 This produces app-release-signed.apk.
 
 Step C: Verification (Digital Asset Links)
@@ -105,7 +118,9 @@ In case of us we used to make like using app/.well-known folder instead of publi
 
 ## 📂 Project Structure
 /public: PWA manifest.json and 512x512 icons for the splash screen.
+
 /src: Implementation of the algobright/solana-connector logic.
+
 .gitignore: Configured to ignore node_modules, .next, and sensitive Android .keystore files.
 
 # 📄 License
