@@ -44,3 +44,6 @@ yarn.lock
 package-lock.json
 
 public/sw.js
+
+/.yalc
+yalc.lock
