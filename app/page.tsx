@@ -3,13 +3,15 @@
 import ConnectButton from "@algobright/solana-connector/ConnectButton";
 import styles from "./page.module.css";
 import { appendTransactionMessageInstructions, assertIsTransactionWithBlockhashLifetime, createSignableMessage, createSolanaRpc, createSolanaRpcSubscriptions, createTransactionMessage, lamports, pipe, sendAndConfirmTransactionFactory, setTransactionMessageFeePayerSigner, setTransactionMessageLifetimeUsingBlockhash, signTransactionMessageWithSigners, TransactionSigner } from "@solana/kit";
-import { createKitSignersFromWallet, signatureBytesToBase58, solToLamports, useCluster, useConnector, useConnectorClient, useKitTransactionSigner } from "@solana/connector";
+import { createKitSignersFromWallet, solToLamports, useCluster, useConnector, useConnectorClient, useKitTransactionSigner } from "@solana/connector";
 import { useMemo } from "react";
 import { getTransferSolInstruction } from "@solana-program/system";
+import { getBase58SignatureFromSignedTransaction, getWebSocketUrlForRpcUrl } from "./utils/rpc_utils";
+import { toast } from "./providers/ToastProvider";
 
 
 export default function Home() {
-  const { signer, ready } = useKitTransactionSigner();
+  const { signer } = useKitTransactionSigner();
 
   const { walletStatus, connectorId } = useConnector();
   const { cluster } = useCluster();
@@ -35,17 +37,18 @@ export default function Home() {
 
 
   const signMessage = async () => {
+
     if (!kitSigners?.messageSigner) {
-      console.error("Message signer not available");
+      toast.error("Message signer not available");
       return;
     }
 
     const messageToSign = "Hello, Algobright!";
-
     try {
       const messageBytes = new TextEncoder().encode(messageToSign);
       const signableMessage = createSignableMessage(messageBytes);
 
+      toast.success("Sending sign request...");
       const signedMessages = await kitSigners.messageSigner.modifyAndSignMessages([signableMessage]);
 
       if (!Array.isArray(signedMessages) || signedMessages.length === 0) {
@@ -69,7 +72,8 @@ export default function Home() {
 
       const signatureBase64 = btoa(String.fromCharCode(...Array.from(signature)));
       console.log('Signed message (base64):', signatureBase64);
-      alert('Message signed successfully! Check console for signature.');
+      toast.success('Message signed successfully!');
+
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to sign message';
       console.error('Message signing error:', err);
@@ -87,7 +91,6 @@ export default function Home() {
     // Create RPC client using web3.js 2.0
     const rpc = createSolanaRpc(rpcUrl);
 
-    let signatureBase58: string | null = null;
 
     try {
       const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
@@ -104,26 +107,23 @@ export default function Home() {
         tx => setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, tx),
         tx => appendTransactionMessageInstructions([transferInstruction], tx),
       );
+      toast.success("Sending Self transfer signing request...");
       const signedTransaction = await signTransactionMessageWithSigners(transactionMessage);
-      signatureBase58 = getBase58SignatureFromSignedTransaction(signedTransaction);
+      const signatureBase58 = getBase58SignatureFromSignedTransaction(signedTransaction);
 
 
       assertIsTransactionWithBlockhashLifetime(signedTransaction);
 
       const rpcSubscriptions = createSolanaRpcSubscriptions(getWebSocketUrlForRpcUrl(rpcUrl));
-      const txSend = await sendAndConfirmTransactionFactory({ rpc, rpcSubscriptions })(signedTransaction, {
+      await sendAndConfirmTransactionFactory({ rpc, rpcSubscriptions })(signedTransaction, {
         commitment: 'confirmed',
       });
-      console.log('Transfer transaction signature (base58):', txSend);
+      toast.success('Transfer transaction signed successfully!');
+      console.log('Transfer transaction signature (base58):', signatureBase58);
 
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to sign transaction';
-      console.error('Transaction signing error:', err);
-    } finally {
-      if (signatureBase58) {
-        console.log('Transfer transaction signature (base58):', signatureBase58);
-        alert('Transfer signed successfully! Check console for signature.');
-      }
+      toast.error(`Transaction signing error: ${errorMessage}`);
     }
 
   };
@@ -192,63 +192,4 @@ export default function Home() {
 }
 
 
-export function getWebSocketUrlForRpcUrl(rpcUrl: string): string {
-  const url = new URL(rpcUrl);
-  url.protocol = url.protocol.replace('http', 'ws');
 
-  // solana-test-validator defaults to HTTP 8899 and WS 8900
-  if ((url.hostname === 'localhost' || url.hostname.startsWith('127')) && (url.port === '8899' || url.port === '')) {
-    url.port = '8900';
-  }
-
-  return url.toString();
-}
-
-export function getBase58SignatureFromSignedTransaction(transaction: unknown): string {
-  if (!transaction || typeof transaction !== 'object') {
-    throw new Error('Invalid signed transaction');
-  }
-
-  const tx = transaction as { messageBytes?: Uint8Array; signatures?: Record<string, Uint8Array> };
-  const messageBytes = tx.messageBytes;
-  const signatures = tx.signatures;
-
-  if (!(messageBytes instanceof Uint8Array) || !signatures || typeof signatures !== 'object') {
-    throw new Error('Signed transaction missing messageBytes/signatures');
-  }
-
-  const numSigners = getNumRequiredSigners(messageBytes);
-  if (numSigners !== 1) {
-    throw new Error(
-      `This demo currently supports single-signer transactions (found ${numSigners} required signers)`,
-    );
-  }
-
-  const firstSig = Object.values(signatures)[0];
-
-  if (!(firstSig instanceof Uint8Array) || firstSig.length !== 64) {
-    throw new Error('Signed transaction missing first signature');
-  }
-
-  return signatureBytesToBase58(firstSig as unknown as Parameters<typeof signatureBytesToBase58>[0]);
-}
-
-
-function getNumRequiredSigners(messageBytes: Uint8Array): number {
-  let offset = 0;
-
-  if (messageBytes.length < 4) {
-    throw new Error('Invalid message: too short for header');
-  }
-
-  // Versioned messages have a version prefix (0x80 | version). Legacy messages do not.
-  if ((messageBytes[0] & 0x80) !== 0) {
-    offset = 1;
-  }
-
-  if (offset >= messageBytes.length) {
-    throw new Error('Invalid message: incomplete header');
-  }
-
-  return messageBytes[offset];
-}

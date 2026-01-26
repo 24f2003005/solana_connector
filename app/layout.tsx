@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SolanaWrapper } from "@algobright/solana-connector";
 import LayoutWrapper from "./components/LayoutWrapper";
+import { ToastProvider } from "./providers/ToastProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,9 +41,11 @@ export default function RootLayout({
           walletConnect={true}
           defaultRpcUrl="https://mainnet.helius-rpc.com/?api-key=dfedba99-f41e-4398-a1f7-3e6e585428f4"
         >
-          <LayoutWrapper>
-            {children}
-          </LayoutWrapper>
+          <ToastProvider>
+            <LayoutWrapper>
+              {children}
+            </LayoutWrapper>
+          </ToastProvider>
         </SolanaWrapper>
       </body>
     </html>
