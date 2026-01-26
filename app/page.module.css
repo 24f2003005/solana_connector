@@ -1,0 +1,22 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  gap: 0.5em;
+}
+.page > span {
+  margin: auto;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+.eachButton {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  width: 100%;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+.eachButton > span {
+  width: 40%;
+}
