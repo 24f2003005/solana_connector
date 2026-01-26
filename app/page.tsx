@@ -3,7 +3,7 @@ import styles from "./page.module.css";
 export default function Home() {
   return (
     <div className={styles.page}>
-      <span className={styles.version}>Version: 0.1.3</span>
+      <span className={styles.version}>Version: 0.1.5</span>
 
       <div className={styles.eachButton}>
         <span>Light Theme,SolBalance </span>
