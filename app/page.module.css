@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   padding: 1em;
-  gap: 0.5em;
+  gap: 1em;
 }
 .page > span {
   margin: auto;
@@ -19,4 +19,36 @@
 }
 .eachButton > span {
   width: 40%;
+}
+
+.signTestButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.signTestButtons > span {
+  align-self: center;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #1eff00;
+}
+
+.signButtons {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+}
+.signButtons > button {
+  padding: 0.5em 1em;
+  font-size: 1em;
+  font-weight: 500;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.signButtons > button:hover {
+  background-color: #45a049;
 }
