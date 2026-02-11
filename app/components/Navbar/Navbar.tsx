@@ -13,8 +13,8 @@ const Navbar = () => {
                 theme='dark'
                 CN_ConnectButton={styles.connectButton}
                 showDefaultToken={{
-                    address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-                    symbol: "USDC"
+                    address: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263',
+                    symbol: "BONK"
                 }}
             />
         </div>

@@ -9,16 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@algobright/solana-connector": "^0.1.6",
+    "@algobright/solana-connector": "^0.1.9",
     "@base-ui/react": "^1.1.0",
     "@serwist/next": "^9.5.5",
     "@serwist/precaching": "^9.5.5",
     "@serwist/sw": "^9.5.5",
     "@solana-program/system": "^0.11.0",
-    "@solana-program/token": "^0.10.0",
-    "@solana/connector": "^0.2.4",
-    "@solana/kit": "^6.0.1",
-    "@solana/react": "^6.0.1",
     "@solana/web3.js": "^1.98.4",
     "@walletconnect/universal-provider": "^2.23.5",
     "next": "16.1.6",
