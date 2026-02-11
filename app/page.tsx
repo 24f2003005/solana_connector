@@ -130,7 +130,7 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
-      <span className={styles.version}>Version: 0.1.5</span>
+      <span className={styles.version}>Version: 0.1.12</span>
 
       <div className={styles.signTestButtons}>
         <span>Test Sign Tx</span>
